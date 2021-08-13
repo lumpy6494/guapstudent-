@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subject %}
+{% load advert %}
+{% load tags %}
+
+
+
+{% block content %}
+
+
+<div class="col-md-12">
+    {% for post in posts  %}
+    <div class="blog-entry ftco-animate d-md-flex">
+        <a href="{{ post.get_absolute_url }}" class="img img-2" style="background-image: url({% if post.photo %}{{ post.photo.url }}{% else %}{% static 'images/z0431.jpg' %}{% endif %});"></a>
+<!--        <img src="https://picsum.photos/id/1060/350/235/?blur=2" alt="" class="mr-3">-->
+        <div class="text text-2 pl-md-4">
+            <h3 class="mb-2"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+            <div class="meta-wrap">
+                <p class="meta">
+                    <span><i class="icon-calendar mr-2"></i>{{ post.created_at }}</span>
+                    <span><a href="{{ post.subjects.get_absolute_url }}"><i class="icon-folder-o mr-2"></i>{{ post.subjects }}</a></span>
+                    <span><i class="icon-eye mr-2"></i> {{ post.views}}</span>
+                </p>
+            </div>
+            <p class="mb-4">{{ post.content|truncatewords_html:40 }}</p>
+            <p><a href="{{ post.get_absolute_url }}" class="btn-custom"> Читать </a></p>
+        </div>
+    </div>
+    {% empty %}
+     <div class="blog-entry ftco-animate d-md-flex">
+         <div class="text text-2 pl-md-4">
+             <p class="mb-4"><h4>По вашему запросу ничего не нейдено :( </h4></p>
+         </div>
+
+     </div>
+
+
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}
+
+{% block page %}
+<div class="row">
+    <div class="col">
+        <div class="block-27">
+            {% if page_obj.paginator.num_pages > 1 %}
+            <ul>
+                {% if page_obj.has_previous %}
+                <li><a href="?{{ s }}page={{page_obj.previous_page_number}}"><</a></li>
+                {% endif %}
+
+                {% for p in page_obj.paginator.page_range %}
+
+                {% if page_obj.number == p %}
+                <li class="active"><a href="?{{ s }}page={{p}}"><span>{{p}}</span></a></li>
+                {% else %}
+                <li><a href="?{{ s }}page={{p}}"><span>{{p}}</span></a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li><a href="?{{ s }}page={{page_obj.next_page_number}}">></a></li>
+                {% endif %}
+
+            </ul>
+            {% endif %}
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% block subjects %}
+<div class="sidebar-box ftco-animate">
+    <h3 class="sidebar-heading"> Предметы </h3>
+    {% show_subject %}
+</div>
+{% endblock %}
+
+
+{% block advert %}
+<div class="sidebar-box ftco-animate">
+    {% show_advert %}
+</div>
+{% endblock %}
+
+
+{% block tags %}
+<div class="sidebar-box ftco-animate">
+    <h3 class="sidebar-heading">Облако Тегов</h3>
+    {% show_tags %}
+</div>
+{% endblock %}

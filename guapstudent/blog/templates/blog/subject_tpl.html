@@ -1,0 +1,8 @@
+
+{% for item in subjects  %}
+
+<ul class="categories" >
+    <li ><a href="{{ item.get_absolute_url }}">{{ item.title }}<span> ({{ item.cnt }})</span></a></li>
+</ul>
+{% endfor %}
+

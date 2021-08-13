@@ -1,0 +1,143 @@
+{% load static %}
+{% load menu %}
+{% load student %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Z0431-Z0432</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/animate.css'%}">
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css'%}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div id="colorlib-page">
+    <a href="{% url 'home'%}" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
+    <aside id="colorlib-aside" role="complementary" class="js-fullheight">
+
+        {% include 'inc/_menu.html' %}
+
+        <div class="colorlib-footer">
+            <h1 id="colorlib-logo" class="mb-4"><a href="{% url 'home'%}"
+                                                   style="background-image: url({% static 'images/bg_1.jpg' %});">Z0431-
+                <span>Z0432</span></a></h1>
+
+            <!--            Блок объявлений -->
+            {% block advert %} {% endblock %}
+
+            <div class="mb-4">
+                <form action="{% url 'search' %}" class="search-form">
+                    <div class="form-group">
+                        <span class="icon icon-search"></span>
+                        <input type="text" class="form-control" name='s' placeholder="Для поиска нажмите Enter">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </aside> <!-- END COLORLIB-ASIDE -->
+    <div id="colorlib-main">
+        <section class="ftco-section ftco-no-pt ftco-no-pb">
+            <div class="container">
+                <div class="row d-flex">
+                    <div class="col-xl-8 py-3 px-md-5">
+
+                        <div class="row pt-md-4">
+
+                            {%block content %}   {% endblock %}
+
+                        </div><!-- END-->
+
+                        <!--                        Пагинация  -->
+
+                        {% block page %} {% endblock %}
+                    </div>
+                    <div class="col-xl-4 sidebar ftco-animate bg-light pt-5">
+                        <!--                       Добавить новость -->
+                        {% block add_post %}
+
+                        <div class="sidebar-box ftco-animate">
+                            {% if request.user.is_authenticated %}
+                            <p> Добро пожаловать: {{ request.user.get_full_name }}</p>
+                            <ul class="categories">
+                                {% if request.user|has_group:"Студент" %}
+                                <li><a href="{% url 'add_post' %}">Добавить новость</a></li>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
+                                <li><a href="{% url 'admin:index' %}">Войти в Админку</a></li>
+                                {% endif %}
+                                <li><a  href = "{% url 'profile' %}"> Профиль</a></li>
+                                <li><a href="{% url 'logout' %}">Выйти</a></li>
+
+                            </ul>
+                            {% else %}
+                            <ul class="categories">
+                                <li><a href="{% url 'register' %}">Регистрация</a></li>
+                                <li><a href="{% url 'login' %}">Войти</a></li>
+                            </ul>
+                            {% endif %}
+                        </div>
+                        {% endblock %}
+
+
+                        <!--				Список предметов -->
+
+                        {% block subjects %} {% endblock %}
+
+                        <!--Популярные посты -->
+                        {% include 'inc/_popular.html' %}
+
+                        <!--                        Вывод тегов-->
+                        {% block tags %} {% endblock %}
+
+
+
+                    </div><!-- END COL -->
+                </div>
+            </div>
+        </section>
+    </div><!-- END COLORLIB-MAIN -->
+</div><!-- END COLORLIB-PAGE -->
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00"/>
+    </svg>
+</div>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+<script src="{% static 'js/scrollax.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>

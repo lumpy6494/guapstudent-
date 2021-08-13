@@ -1,0 +1,9 @@
+{% load student %}
+<ul>
+    <li class="{% if slug_url == '' %}{{active}}{% endif %}"><a href="{% url 'home' %}">Главная</a></li>
+    <li class="{% if slug_url == 'service' %}{{active}}{% endif %}"><a href="{% url 'mega' %}">Сервисы</a></li>
+    {% for item in courses %}
+    <li class="{% if item.slug == slug_url %}{{active}}{% endif %}" ><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+    {% endfor %}
+
+</ul>

@@ -1,0 +1,16 @@
+{% load static %}
+    {% for post in popular %}
+<div class="block-21 mb-4 d-flex">
+    <a class="blog-img mr-4"
+       style="background-image: url( {% if post.photo %}{{ post.photo.url }}{% else %}{% static 'images/z0431.jpg' %}{% endif %});"></a>
+    <div class="text">
+        <h3 class="heading"><a href="{{post.get_absolute_url}}">{{ post.title }}</a>
+        </h3>
+        <div class="meta">
+            <div><span class="icon-calendar"></span>{{ post.created_at|date:"j E Y" }}</div>
+            <div><span class="icon-person"></span>{{post.author}}</div>
+            <div><span class="icon-eye"></span> {{ post.views }}</div>
+        </div>
+    </div>
+</div>
+  {% endfor %}

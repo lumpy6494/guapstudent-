@@ -1,0 +1,6 @@
+
+<ul class="tagcloud">
+    {% for tag in tags %}
+    <a href="{{tag.get_absolute_url}}" class="tag-cloud-link">{{ tag.title }}</a>
+    {% endfor %}
+</ul>

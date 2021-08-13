@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subject %}
+{% load advert %}
+{% load tags %}
+
+
+{% block content %}
+{% if not request.user.is_authenticated %}
+
+<h4 class="mb-5">Благодарим вас за время, проведенное на сайте.</h4>
+{% endif %}
+
+{% endblock %}
+
+
+
+
+{% block subjects %}
+<div class="sidebar-box ftco-animate">
+
+    <h3 class="sidebar-heading"> Предметы </h3>
+    {% show_subject %}
+</div>
+{% endblock %}
+
+
+{% block advert %}
+<div class="sidebar-box ftco-animate">
+    {% show_advert %}
+</div>
+{% endblock %}
+
+
+{% block tags %}
+<div class="sidebar-box ftco-animate">
+    <h3 class="sidebar-heading">Облако Тегов</h3>
+    {% show_tags %}
+</div>
+{% endblock %}
