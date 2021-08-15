@@ -8,11 +8,11 @@
 {% block content %}
 <div class="meta-wrap">
     <h1 class="mb-3 ">{{ post.title }}</h1>
-{% if post.photo %}
-<p>
-    <img src="{{ post.photo.url }}" class="img-fluid">
-</p>
-{% endif %}
+    {% if post.photo %}
+    <p>
+        <img src="{{ post.photo.url }}" class="img-fluid">
+    </p>
+    {% endif %}
     <p>{{ post.content|linebreaks }} </p>
 
     <div class="tag-widget post-tag-container mb-5 mt-5">
@@ -24,6 +24,14 @@
             {% endif %}
         </div>
 
+        {% if request.user.is_superuser %}
+        <div class="tagcloud">
+            <h5>Данную статью смотрели: </h5>
+            {% for userview in post.post_view_users.all %}
+            <a class="tag-cloud-link">{{userview.first_name_user}} {{userview.last_name_user}} {{userview.date_user_view}} </a>
+            {% endfor %}
+        </div>
+        {%endif%}
     </div>
 
 </div>

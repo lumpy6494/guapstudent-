@@ -1,15 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+
+from blog.models import Post, ViewsUser
 from user.forms import RegisterForm, UserLoginForm, UpadateUserForm, UpadatePassowordForm
 
 from user.models import CastomUser, Promokod
-
 
 
 class LoginUser(LoginView):
@@ -71,6 +73,9 @@ class EditPassword(LoginRequiredMixin, PasswordChangeView):
     template_name = 'user/editpass.html'
     success_url = reverse_lazy('profile')
 
+
+
+
 # Срач в коде :D
 # def register_user(request):
 #     if request.method == 'POST':
@@ -110,4 +115,3 @@ class EditPassword(LoginRequiredMixin, PasswordChangeView):
 # def user_logout(request):
 #     logout(request)
 #     return redirect('login')
-

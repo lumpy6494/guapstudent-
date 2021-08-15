@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+from user.models import CastomUser
 
 
 class Course(models.Model):
@@ -59,6 +60,9 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
         ordering = ['title']
 
+#
+
+
 
 class Post(models.Model):
     '''Модель Постов'''
@@ -66,7 +70,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255, verbose_name='Пост')
     # slug = models.SlugField(max_length=100, unique=True, verbose_name='URL Проста')
     content = models.TextField(blank=True, verbose_name='Контент')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор', editable=False, blank=True, null=True )
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор', editable=False,)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Миниатюра', blank=True)
@@ -87,6 +91,24 @@ class Post(models.Model):
         verbose_name_plural = 'Посты'
         ordering = ['-created_at']
 
+class ViewsUser(models.Model):
+    """Модель просмотров юзера """
+    first_name_user = models.CharField(max_length=200, verbose_name='Имя', blank= True, null=True)
+    two_name_user = models.CharField(max_length=200, verbose_name='Отчество', blank= True, null=True)
+    last_name_user = models.CharField(max_length=200, verbose_name='Фамилия', blank= True, null=True)
+    date_user_view = models.DateField(auto_now = True, verbose_name='Дата просмотра')
+    views_users = models.ManyToManyField(Post, related_name='post_view_users', verbose_name ='Просмотры пользователей',)
+
+    # def __str__(self):
+    #     return self.last_name_user
+
+
+    class Meta:
+        verbose_name = 'Просмотры'
+        verbose_name_plural = 'Просмотры'
+        ordering = ['-date_user_view']
+
+
 
 class Advert(models.Model):
     '''Модель Объявления'''
@@ -96,7 +118,7 @@ class Advert(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
 
     def __str__(self):
-        return " Объявлениe "
+        return " Объявлениe"
 
     class Meta:
         verbose_name = 'Объявления'

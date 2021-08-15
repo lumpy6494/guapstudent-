@@ -14,16 +14,15 @@ class UserLoginForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-
     username = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Введите логин'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите логин'}))
     first_name = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'Введите Имя'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Имя'}))
 
     two_name = forms.CharField(
-        label= '',
+        label='',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Отчество'})
     )
     last_name = forms.CharField(
@@ -31,30 +30,34 @@ class RegisterForm(UserCreationForm):
         label='',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Фамилию'}))
 
+    birthday = forms.DateField(
+        required=False,
+        label='',
+        help_text='Необязятельное поле',
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Введите День Вашего Рождения'})
+    )
 
     password1 = forms.CharField(
         label='',
-        widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Введите пароль'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Введите пароль'}))
 
     password2 = forms.CharField(
         label='',
-        widget=forms.PasswordInput(attrs={'class':'form-control', 'placeholder': 'Потвердите пароль'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Потвердите пароль'}))
 
     email = forms.EmailField(
         label='',
-        widget=forms.EmailInput(attrs={'class':'form-control', 'placeholder': 'Введите Email'}))
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите Email'}))
 
     promo = forms.CharField(required=False,
-        help_text='Пригласительный если есть',
-        label='',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Пригласительный'}))
-
-
+                            help_text='Пригласительный если есть (Необязятельное поле)',
+                            label='',
+                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Пригласительный'}))
 
     class Meta:
         model = CastomUser
 
-        fields = ['username', 'first_name', 'two_name', 'last_name', 'email', 'password1', 'password2', 'promo' ]
+        fields = ['username', 'first_name', 'two_name', 'last_name','birthday', 'email', 'password1', 'password2', 'promo']
 
 
 class UpadateUserForm(forms.ModelForm):
@@ -74,17 +77,21 @@ class UpadateUserForm(forms.ModelForm):
         label='Фамилия',
         widget=forms.TextInput(attrs={'class': 'form-control'}))
 
+    birthday = forms.DateField(
+        required=False,
+        label='',
+        help_text='Дата Рождения',
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Введите День Вашего Рождения'})
+    )
 
     email = forms.EmailField(
         label='Email',
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите Email'}))
 
-
     class Meta:
         model = CastomUser
 
-        fields = ['username', 'first_name', 'two_name', 'last_name', 'email',]
-
+        fields = ['username', 'first_name', 'two_name', 'last_name', 'birthday', 'email', ]
 
 
 class UpadatePassowordForm(SetPasswordForm):
@@ -98,9 +105,4 @@ class UpadatePassowordForm(SetPasswordForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Потвердите новый пароль'}))
 
     class Meta:
-        fields = [ 'new_password1', 'new_password2']
-
-
-
-
-
+        fields = ['new_password1', 'new_password2']

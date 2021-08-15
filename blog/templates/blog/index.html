@@ -3,12 +3,19 @@
 {% load subject %}
 {% load advert %}
 {% load tags %}
+{% load birthday %}
 
 
 {% block content %}
 
 
 <div class="col-md-12">
+    <div class="blog-entry ftco-animate d-md-flex">
+        {% if request.user.is_authenticated %}
+        {% birthday %}
+        {% endif %}
+    </div>
+
     {% for post in posts %}
     <div class="blog-entry ftco-animate d-md-flex">
         <a href="{{ post.get_absolute_url }}" class="img img-2"
@@ -49,7 +56,7 @@
 
                 {% if page_obj.number == p %}
                 <li class="active"><a href="?page={{p}}"><span>{{p}}</span></a></li>
-                {% elif  p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
                 <li><a href="?page={{p}}"><span>{{p}}</span></a></li>
                 {% endif %}
                 {% endfor %}
@@ -66,8 +73,6 @@
     </div>
 </div>
 {% endblock %}
-
-
 
 
 {% block subjects %}
