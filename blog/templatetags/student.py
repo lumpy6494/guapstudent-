@@ -1,6 +1,4 @@
 from django import template
-from django.contrib.auth.models import User
-# from blog.models import ViewsUser
 register = template.Library()
 
 

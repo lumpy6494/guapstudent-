@@ -3,6 +3,9 @@
 {% load static %}
 {% load advert %}
 {% load tags %}
+
+{% block title %} {{ block.super }} : {{ title }} {% endblock %}
+
 {% block content %}
 
 {% for post in posts  %}
@@ -20,7 +23,7 @@
                     <span><i class="icon-eye mr-2"></i>{{ post.views}}</span>
                 </p>
             </div>
-            <p class="mb-4">{{ post.content|truncatewords_html:40  }}</p>
+            <p class="mb-4">{{ post.content|safe|truncatewords_html:40  }}</p>
             <p><a href="{{ post.get_absolute_url }}" class="btn-custom"> Читать </a></p>
         </div>
     </div>

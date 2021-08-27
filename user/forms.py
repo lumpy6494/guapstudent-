@@ -1,7 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm
 from django import forms
-from .models import CastomUser, Promokod
-from django.contrib.auth.models import User, Group
+from .models import CastomUser
 
 
 class UserLoginForm(AuthenticationForm):
@@ -16,25 +15,26 @@ class UserLoginForm(AuthenticationForm):
 class RegisterForm(UserCreationForm):
     username = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите логин'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Логин'}))
+
     first_name = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Имя'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}))
 
     two_name = forms.CharField(
         label='',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Отчество'})
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Отчество'})
     )
     last_name = forms.CharField(
         help_text='Укажите Ваше реальные ФИО чтобы получить доступ к скрытой информации',
         label='',
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите Фамилию'}))
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}))
 
     birthday = forms.DateField(
         required=False,
         label='',
         help_text='Необязятельное поле',
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Введите День Вашего Рождения'})
+        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'День Вашего Рождения'})
     )
 
     password1 = forms.CharField(
@@ -43,7 +43,7 @@ class RegisterForm(UserCreationForm):
 
     password2 = forms.CharField(
         label='',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Потвердите пароль'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Подтвердите пароль'}))
 
     email = forms.EmailField(
         label='',
@@ -54,10 +54,18 @@ class RegisterForm(UserCreationForm):
                             label='',
                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Пригласительный'}))
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        user.is_active = False
+        user.is_activated =False
+        if commit:
+            user.save()
+        return user
     class Meta:
         model = CastomUser
-
-        fields = ['username', 'first_name', 'two_name', 'last_name','birthday', 'email', 'password1', 'password2', 'promo']
+        fields = ['username', 'first_name', 'two_name', 'last_name', 'birthday', 'email', 'password1', 'password2',
+                  'promo']
 
 
 class UpadateUserForm(forms.ModelForm):
@@ -95,7 +103,6 @@ class UpadateUserForm(forms.ModelForm):
 
 
 class UpadatePassowordForm(SetPasswordForm):
-
     new_password1 = forms.CharField(
         label='',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Новый пароль'}))

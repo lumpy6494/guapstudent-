@@ -1,9 +1,13 @@
-<p style="color:#800000">Группы Z0431 и Z0432 Сердечно поздравляют
+{% if birthday_user.exists %}
+<div>
+    {{ content.title|safe}}
     {% for item in birthday_user %}
-    <font style="color:A52A2A" size="4%">
+    <font style="color:{{content.color}}" size="4%">
         {{ item.last_name }}
         {{ item.first_name }}
         {{ item.two_name }}</font>,
     {% endfor %}
-    C Днем Рождения и желаем чтобы голова была вместительной, как жесткий диск и на всю необходимую информацию всегда хватало памяти!
-    Пусть софт всегда будет верным помощником и да рождается от вашей руки новое программное обеспечение, движущее мир!</p>
+    {{ content.body|safe}}
+</div>
+
+{% endif %}

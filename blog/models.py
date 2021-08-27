@@ -1,11 +1,21 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.safestring import mark_safe
-from django.utils.text import slugify
-from user.models import CastomUser
 
+
+class Birthday(models.Model):
+    title = models.TextField(blank= True, verbose_name='Верхняя часть поздравления')
+    body = models.TextField(blank= True, verbose_name='Нижняя часть поздравления')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    color = models.CharField( max_length= 200,blank=True, verbose_name='Цвет пользователей')
+
+    def __str__(self):
+        return 'Поздравление'
+
+    class Meta:
+        verbose_name = 'Поздравления'
+        verbose_name_plural = 'Поздравления'
+        ordering = ['-created_at']
 
 class Course(models.Model):
     '''Модель курса'''
@@ -76,7 +86,7 @@ class Post(models.Model):
     photo = models.ImageField(upload_to='photo/%Y/%m/%d', verbose_name='Миниатюра', blank=True)
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     subjects = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='posts', verbose_name='Предмет')
-    courses = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='posts', verbose_name='Курс', )
+    courses = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='posts', verbose_name='Курс' )
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts', verbose_name='Теги', )
     views = models.IntegerField(default=0, verbose_name='Количество просмотров')
 
@@ -93,21 +103,22 @@ class Post(models.Model):
 
 class ViewsUser(models.Model):
     """Модель просмотров юзера """
+
     first_name_user = models.CharField(max_length=200, verbose_name='Имя', blank= True, null=True)
     two_name_user = models.CharField(max_length=200, verbose_name='Отчество', blank= True, null=True)
     last_name_user = models.CharField(max_length=200, verbose_name='Фамилия', blank= True, null=True)
-    date_user_view = models.DateField(auto_now = True, verbose_name='Дата просмотра')
-    views_users = models.ManyToManyField(Post, related_name='post_view_users', verbose_name ='Просмотры пользователей',)
+    uuid_us = models.CharField(max_length=255, verbose_name='UUID_Пользователя', blank=True, null=True)
+    views_users = models.ManyToManyField(Post, related_name='post_view_users', verbose_name ='Просмотры пользователей')
+    date_views = models.DateField(auto_now_add=True, verbose_name='Дата последнего просмотра')
 
-    # def __str__(self):
-    #     return self.last_name_user
+    def __str__(self):
+        return self.last_name_user
 
 
     class Meta:
         verbose_name = 'Просмотры'
         verbose_name_plural = 'Просмотры'
-        ordering = ['-date_user_view']
-
+        ordering = ['-date_views']
 
 
 class Advert(models.Model):

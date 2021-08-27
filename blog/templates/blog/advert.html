@@ -1,6 +1,6 @@
 {% load advert %}
 
 <h3 class="sidebar-heading">{{adverts}}</h3>
-<p style="color:#ff0000">{{adverts.content}}</p>
+<p>{{adverts.content|safe}}</p>
 
 

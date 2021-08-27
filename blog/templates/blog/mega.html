@@ -6,13 +6,14 @@
 {% load advert %}
 {% load tags %}
 
+{% block title %} {{ block.super }} : Сервисы {% endblock %}
+
 
 {% block content %}
 {% if request.user.is_authenticated %}
 {% if request.user|has_group:"Студент" %}
-
-{% for service in cloudservices %}
 <div>
+{% for service in cloudservices %}
 <h2 class="mb-3 mt-5">{{ service.title }}</h2>
 {% if service.image %}
 <p>
@@ -23,8 +24,9 @@
 <p><b> Пароль:</b> {{ service.password }} </p>
 <p><b>Ссылка:</b> <a href=" {{ service.url }}">{{ service.title }}</a> </p>
 <p><b>Дополнительная информация:</b> {{ service.extra }} </p>
-</div>
+
 {% endfor %}
+</div>
 {% else %}
 <h2 class="mb-3 mt-5">У Вас нет доступа к данной странице </h2>
 {% endif %}

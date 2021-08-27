@@ -7,8 +7,8 @@
         <h3 class="heading"><a href="{{post.get_absolute_url}}">{{ post.title }}</a>
         </h3>
         <div class="meta">
-            <div><span class="icon-calendar"></span>{{ post.created_at|date:"j E Y" }}</div>
-            <div><span class="icon-person"></span>{{post.author}}</div>
+            <div><span class="icon-calendar"></span> {{ post.created_at|date:"j E Y" }}</div>
+            <div><span class="icon-person"></span> {{post.author}}</div>
             <div><span class="icon-eye"></span> {{ post.views }}</div>
         </div>
     </div>

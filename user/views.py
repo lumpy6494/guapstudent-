@@ -1,17 +1,17 @@
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
-from django.db.models import F
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.core.exceptions import ObjectDoesNotExist
 
-from blog.models import Post, ViewsUser
 from user.forms import RegisterForm, UserLoginForm, UpadateUserForm, UpadatePassowordForm
-
+from django.core.signing import BadSignature
 from user.models import CastomUser, Promokod
+from .apps import user_registered
+from .utilites import signer
 
 
 class LoginUser(LoginView):
@@ -25,10 +25,9 @@ class LogoutUser(LogoutView):
 
 
 class RegisterView(CreateView):
-    model = CastomUser
     template_name = 'user/register.html'
     form_class = RegisterForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('register_done')
 
     def get_queryset(self):
         return Promokod.objects.all()
@@ -38,18 +37,40 @@ class RegisterView(CreateView):
         promo = form.cleaned_data['promo']
         promokod = self.get_queryset()
         user = form.save()
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password1']
-
         for item in promokod:
             if str(item) == str(promo):
-                group = Group.objects.get(name='Студент')
-                user.groups.add(group)
-                group.save()
-
-        new_user = authenticate(username=username, password=password)
-        login(self.request, new_user)
+                try:
+                    group = Group.objects.get(name=item.gpoup_user)
+                    user.groups.add(group)
+                    group.save()
+                except ObjectDoesNotExist:
+                    pass
+        user_registered.send(RegisterForm, instance=user)
         return valid
+
+
+class RegisterViewDone(TemplateView):
+    template_name = 'user/register_done.html'
+
+
+def user_activate(request, sign):
+    try:
+        username = signer.unsign(sign)
+    except BadSignature:
+        return None
+    user = get_object_or_404(CastomUser, username=username)
+    if user.is_activated:
+        template = 'blog/index.html'
+        if not user.is_authenticated:
+            login(request, user)
+    else:
+        template = 'user/register_activate.html'
+        user.is_activated = True
+        user.is_active = True
+        user.save()
+        login(request, user)
+
+    return render(request, template)
 
 
 class EditProfile(LoginRequiredMixin, UpdateView):
@@ -72,9 +93,6 @@ class EditPassword(LoginRequiredMixin, PasswordChangeView):
     form_class = UpadatePassowordForm
     template_name = 'user/editpass.html'
     success_url = reverse_lazy('profile')
-
-
-
 
 # Срач в коде :D
 # def register_user(request):

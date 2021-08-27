@@ -7,13 +7,14 @@
 
 {% block content %}
 <div class="meta-wrap">
+    {% if request.user.is_authenticated %}
     <h1 class="mb-3 ">{{ post.title }}</h1>
     {% if post.photo %}
     <p>
         <img src="{{ post.photo.url }}" class="img-fluid">
     </p>
     {% endif %}
-    <p>{{ post.content|linebreaks }} </p>
+    <p>{{ post.content|safe|linebreaks }} </p>
 
     <div class="tag-widget post-tag-container mb-5 mt-5">
         <div class="tagcloud">
@@ -24,16 +25,24 @@
             {% endif %}
         </div>
 
-        {% if request.user.is_superuser %}
+        {% if request.user.is_superuser or request.user.is_staff %}
         <div class="tagcloud">
             <h5>Данную статью смотрели: </h5>
             {% for userview in post.post_view_users.all %}
-            <a class="tag-cloud-link">{{userview.first_name_user}} {{userview.last_name_user}} {{userview.date_user_view}} </a>
+            <a class="tag-cloud-link">{{userview.first_name_user}} {{userview.last_name_user}} </a>
             {% endfor %}
         </div>
         {%endif%}
     </div>
+{% else %}
 
+     <p>
+        <img  src="{% static  '/images/anonymous.jpg' %}" class="img-fluid">
+    </p>
+
+    <h4 class="mb-3" style="color:#800000" >Для просмотра страницы, пожалуйста, авторизуйтесь на сайте.</h4>
+
+    {% endif %}
 </div>
 
 {% endblock %}

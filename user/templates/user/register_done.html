@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load subject %}
+{% load advert %}
+{% load tags %}
+
+
+{% block content %}
+
+<h3 class="mb-3">Регистрация почти завершена</h3>
+<p>На адрес электронной почты, указанный пользователем, выслано письмо для активации.</p>
+
+{% endblock %}
+
+
+{% block subjects %}
+<div class="sidebar-box ftco-animate">
+
+    <h3 class="sidebar-heading"> Предметы </h3>
+    {% show_subject %}
+</div>
+{% endblock %}
+
+
+{% block advert %}
+<div class="sidebar-box ftco-animate">
+    {% show_advert %}
+</div>
+{% endblock %}
+
+
+{% block tags %}
+<div class="sidebar-box ftco-animate">
+    <h3 class="sidebar-heading">Облако Тегов</h3>
+    {% show_tags %}
+</div>
+{% endblock %}
